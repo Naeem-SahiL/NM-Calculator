@@ -36,3 +36,30 @@
     transform: rotate(360deg);
   }
 }
+
+.container{
+  border: 1px solid;
+  padding: 15px;
+}
+.expr{
+  display: flex;
+  background-color: #61dafb;
+}
+.exprInput{
+  flex: 1;
+}
+.app{
+  /* width: 900px; */
+}
+.result{
+  display: block;
+  align-items: flex-end;
+}
+
+.home{
+  border: 1px solid green;
+}
+.sidebar{
+  margin-right: 10px;
+  width: 20%;
+}
