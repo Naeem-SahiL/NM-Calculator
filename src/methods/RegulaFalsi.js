@@ -1,13 +1,13 @@
 import { abs, all, create } from "mathjs";
 import React, { useState } from "react";
 
-function Bisection() {
-  const [alert, SetAlert] = useState("");
+function RegulaFalsi(){
+    const [alert, SetAlert] = useState("");
   const [show, SetShow] = useState(false);
-  const [x0, SetX0] = useState(0);
-  const [x1, SetX1] = useState(0);
+  var [x0, SetX0] = useState(0);
+  var [x1, SetX1] = useState(0);
   const [str, SetStr] = useState("");
-  const [itr, SetItr] = useState(100);
+//   const [itr, SetItr] = useState(100);
   const [tol, SetTol] = useState(0.0001);
   const [ans, SetAns] = useState(0);
   var [result, SetResult] = useState(2);
@@ -20,6 +20,7 @@ function Bisection() {
     if (str.length < 1) {
       SetShow(true);
       SetAlert("Please enter an exprssion!");
+      return;
     }
     list.length = 0;
 
@@ -27,42 +28,53 @@ function Bisection() {
     const code = node.compile();
 
     const f = (x) => {
-      console.log("f");
+      console.log(code.evaluate({ x: x }));
       return code.evaluate({ x: x });
     };
-    if (f(x0) * f(x1) > 0.0) {
-      SetShow(true);
-      SetAlert("Wrong initial Gueses.Please retry!");
-      console.log("alert");
-      return;
-    }
-    var i = 1;
-    var x2 = 0,
-      _x1 = x1,
-      _x0 = x0;
-    var condition = true;
-    var _fx = 0;
-    while (condition) {
-      x2 = _x0 / 2 + _x1 / 2;
-      _fx = f(x2);
-      list.push({ step: i, x0: _x0, x1: _x1, x2: x2, fx: _fx });
 
-      if (f(_x0) * f(x2) < 0) {
-        _x1 = x2;
-      } else {
-        _x0 = x2;
-      }
+    var _x0 = x0, _x1 = x1, x, f0, f1, _f, e = tol;
+	var step = 1; 
 
-      condition = abs(f(x2)) > tol && i < itr;
-      i = i + 1;
-    }
-    SetAns(x2);
-    SetShow(true);
+    f0 = f(x0);
+	f1 = f(x1);
+
+    if( f0 * f1 > 0.0)
+	 {
+        SetShow(true);
+        SetAlert("Wrong initial Gueses.Please retry!");
+        console.log("alert");
+        return;
+	 }
+     do
+	 {
+		  /* Applying False Position Method */
+		  /* x is next approximated root using False Position method */
+		  x = x0 - (_x0-_x1) * f0/ (f0-f1);
+		  _f = f(x);
+          list.push({ step: step, x0: _x0, x1: _x1, x2: x, fx: _f });
+
+		  if( f0 * _f < 0)
+		  {
+			   x1 = x;
+			   f1 = _f;
+		  }
+		  else
+		  {
+			   x0 = x;
+			   f0 = _f;
+		  }
+		  step = step + 1;
+	 }while(abs(f(x))>e);
+     SetAns(x);
+     SetShow(true);
+  };
+  const  closeAlert = () =>{
+    SetShow(false);
   };
   return (
     <>
-    <h4>Bisection</h4>
-      <div className="container">
+    <h4>Regula Falsi</h4>
+      <div className="container-method">
         <div className="row">
           <div className="col">
             <div className="row">
@@ -103,7 +115,7 @@ function Bisection() {
               </div>
             </div>
           </div>
-          <div className="col">
+          {/* <div className="col">
             <div className="row">
               <p>No of iterations: </p>
               <div className="ml-2">
@@ -114,7 +126,7 @@ function Bisection() {
                 />
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="row">
@@ -139,6 +151,7 @@ function Bisection() {
           {show ? (
             <div class="container " role="alert">
               {alert}
+              <button onClick={()=>closeAlert()}>Close</button>
             </div>
           ) : null}
         </div>
@@ -182,4 +195,5 @@ function Bisection() {
   );
 }
 
-export default Bisection;
+
+export default RegulaFalsi;

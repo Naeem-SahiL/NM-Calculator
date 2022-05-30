@@ -41,6 +41,10 @@
   border: 1px solid;
   padding: 15px;
 }
+.container-method{
+  border: 1px solid;
+  padding: 15px;
+}
 .expr{
   display: flex;
   background-color: #61dafb;
@@ -49,7 +53,10 @@
   flex: 1;
 }
 .app{
-  /* width: 900px; */
+  flex: 1;
+}
+.content{
+  width: 80%;
 }
 .result{
   display: block;
@@ -58,6 +65,7 @@
 
 .home{
   border: 1px solid green;
+  display: flex;
 }
 .sidebar{
   margin-right: 10px;

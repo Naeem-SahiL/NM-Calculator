@@ -12,14 +12,17 @@
     /* background-color: aqua; */
     text-decoration: none;
 }
-.sidebarLink{
+.sidebarLink,.sidebarLink:hover{
     background-color: transparent;
     border: none;
     /* background-color: antiquewhite; */
+    color: black;
+    text-decoration: none;
     width: 70%;
     height: 30px;
     text-align: left;
-    font-size: 18px;
+    
+    font-size: 14px;
     font-weight: bold;
     outline: none;
     cursor: pointer;
@@ -35,14 +38,18 @@
     width: 100%;
 }
 .mainMenu{
-    display: flex;
     align-items: center;
-    background-color: blue;
-    
+    /* background-color: blue; */
 }
-.mainMenu>.plus{
-    font-weight: bold;
-    background-color: aqua;
+.mainMenu>.name{
+    /* font-weight: bold; */
+    border: 1px solid;
+    margin: 2px;
+   
+    /* background-color: aqua; */
+}
+.active{
+    background-color: rgb(212, 215, 218);
 }
 /* .rotate{
     transform: rotate(90deg);

@@ -1,11 +1,11 @@
 import { abs, all, create } from "mathjs";
 import React, { useState } from "react";
 
-function Bisection() {
-  const [alert, SetAlert] = useState("");
+function Secant(){
+    const [alert, SetAlert] = useState("");
   const [show, SetShow] = useState(false);
-  const [x0, SetX0] = useState(0);
-  const [x1, SetX1] = useState(0);
+  var [x0, SetX0] = useState(0);
+  var [x1, SetX1] = useState(0);
   const [str, SetStr] = useState("");
   const [itr, SetItr] = useState(100);
   const [tol, SetTol] = useState(0.0001);
@@ -20,6 +20,7 @@ function Bisection() {
     if (str.length < 1) {
       SetShow(true);
       SetAlert("Please enter an exprssion!");
+      return;
     }
     list.length = 0;
 
@@ -27,42 +28,54 @@ function Bisection() {
     const code = node.compile();
 
     const f = (x) => {
-      console.log("f");
+      console.log(code.evaluate({ x: x }));
       return code.evaluate({ x: x });
     };
-    if (f(x0) * f(x1) > 0.0) {
-      SetShow(true);
-      SetAlert("Wrong initial Gueses.Please retry!");
-      console.log("alert");
-      return;
-    }
-    var i = 1;
-    var x2 = 0,
-      _x1 = x1,
-      _x0 = x0;
-    var condition = true;
-    var _fx = 0;
-    while (condition) {
-      x2 = _x0 / 2 + _x1 / 2;
-      _fx = f(x2);
-      list.push({ step: i, x0: _x0, x1: _x1, x2: x2, fx: _fx });
 
-      if (f(_x0) * f(x2) < 0) {
-        _x1 = x2;
-      } else {
-        _x0 = x2;
-      }
+    var _x0 = x0, _x1 = x1, x2, f0, f1, f2, e = tol;
 
-      condition = abs(f(x2)) > tol && i < itr;
-      i = i + 1;
-    }
-    SetAns(x2);
-    SetShow(true);
+	var step = 1;
+     do
+	 {
+		  f0 = f(_x0);
+		  f1 = f(_x1);
+		  if(f0 == f1)
+		  {
+            SetShow(true);
+            SetAlert("Mathematical error");
+            console.log("alert");
+            return;
+		  }
+
+		  x2 = _x1 - (_x1 - _x0) * f1/(f1-f0);
+		  f2 = f(x2);
+          list.push({ step: step, x0: _x0, x1: _x1, x2: x2, fx: f2 });
+		  _x0 = _x1;
+		  f0 = f1;
+		  _x1 = x2;
+		  f1 = f2;
+
+		  step = step + 1;
+
+		  if(step > itr)
+		  {
+               SetShow(true);
+               SetAlert("Not Convergent.");
+               console.log("alert");
+               return;
+		  }
+	 }while(abs(f2)>e);
+
+     SetAns(x2);
+     SetShow(true);
+  };
+  const  closeAlert = () =>{
+    SetShow(false);
   };
   return (
     <>
-    <h4>Bisection</h4>
-      <div className="container">
+    <h4>Secant</h4>
+      <div className="container-method">
         <div className="row">
           <div className="col">
             <div className="row">
@@ -139,6 +152,7 @@ function Bisection() {
           {show ? (
             <div class="container " role="alert">
               {alert}
+              <button onClick={()=>closeAlert()}>Close</button>
             </div>
           ) : null}
         </div>
@@ -182,4 +196,4 @@ function Bisection() {
   );
 }
 
-export default Bisection;
+export default Secant
